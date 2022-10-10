@@ -1,43 +1,66 @@
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			]
+			API_URL: "https://www.swapi.tech/api",
+			API_URL_IMG: "https://starwars-visualguide.com/assets/img/",
+			characters: undefined,
+			image: undefined,
+			planets: undefined,
+			characterInfo: null,
+			favorites: []
+
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
+			getCharacters: async () => {
+				const store = getStore()
+				try {
+					const response = await fetch(store.API_URL + "/people")
+					let body = await response.json()
+					if (!response.ok) {
+						throw new Error(`Something unexpected happened. Error: ${response.status}`)
+					}
+					setStore({characters: body.results})
+					console.log(body.results)
+				} catch (error) {
+					console.log(error)
+				}
+				
 			},
-			loadSomeData: () => {
-				/**
-					fetch().then().then(data => setStore({ "foo": data.bar }))
-				*/
+			getPlanets: async () => {
+				const store = getStore()
+				try {
+					const response = await fetch(store.API_URL + "/planets")
+					let body = await response.json()
+					if (!response.ok) {
+						throw new Error(`Something unexpected happened. Error: ${response.status}`)
+					}
+					setStore({planets: body.results})
+					console.log(body.results)
+				} catch (error) {
+					console.log(error)
+				}
 			},
-			changeColor: (index, color) => {
-				//get the store
-				const store = getStore();
-
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
-				});
-
-				//reset the global store
-				setStore({ demo: demo });
+			getCharacterInfo: async (props) => {
+				const store = getStore()
+				try {
+					const response = await fetch(store.API_URL + '/people/' + props)
+					let body = await response.json()
+					if (!response.ok) {
+						throw new Error(`Something went wrong. Error: ${response.status}`)
+					}
+					setStore({characterInfo: body.result.properties})
+					console.log(characterInfo)
+					console.log(body.result.properties)
+				} catch(error) {
+					console.log(error)
+				}
+			},
+			setFavorite(favoriteName, favoriteURL, favoriteID) {
+				const store = getStore()
+				setStore({favorites: [...store.favorites, {name: favoriteName, type: favoriteURL, favoriteID}]})
 			}
+
 		}
 	};
 };
