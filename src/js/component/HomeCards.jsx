@@ -5,7 +5,7 @@ export const HomeCard = (props) => {
     return (
         <div className="card" style={{minWidth:"13rem"}}>
             <object data={props.image} className="card-img-top" type="image/jpg">
-                <img src="https://via.placeholder.com/400x400.png?text=Image+Not+Found" className="card-img-top" alt="..."/>
+                <img src="https://via.placeholder.com/400x400.png?text=This+image+was+not+found" className="card-img-top" alt="..."/>
             </object>
             <div className="card-body">
                 <h5 className="card-title">{props.name}</h5>
